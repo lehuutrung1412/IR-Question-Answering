@@ -29,10 +29,13 @@ function upload(){
         success: function (response){
             if (response){
                 console.log(response);
-                let ans = response['ans'];
+                let ans = response['answer'];
                 let text = response['text'];
+                let start = response['start'];
+                let end = response['end'];
+                text = text.slice(0, start) + "<strong>" + text.slice(start, end) + "</strong>" + text.slice(end, text.lenght);
                 answer.value = ans;
-                textans.value = text;
+                textans.innerHTML = text;
             }
             else{
                 console.log('No response');
