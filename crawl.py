@@ -2,18 +2,20 @@ from googlesearch import search
 from bs4 import BeautifulSoup
 import requests
 import re
+import concurrent.futures
+MAX_THREADS = 30
 
 class Documents:
     def __init__(self, query):
         self.query = query
+        self.link_search = search(self.query)
         
-    def get(self):
-        link_search = search(self.query)
+    def get_(self):
         docs = []
         count = 0
         i = 0
         while count < 5 and i < 10:
-            url = link_search[i]
+            url = self.link_search[i]
             if url.split('/')[0] == '':
                 i += 1
                 continue
@@ -36,4 +38,10 @@ class Documents:
             docs.append(doc_str)
             i += 1
             count += 1
+        return docs
+
+    def get(self):
+        threads = min(MAX_THREADS, len(self.link_search))
+        with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
+            docs = [executor.submit(self.get_, self.link_search).result()]
         return docs
