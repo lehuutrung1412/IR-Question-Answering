@@ -2,10 +2,12 @@ import itertools
 from rank_bm25 import BM25Okapi
 import spacy
 import concurrent.futures
+import spacy
+spacy.prefer_gpu()
 
 class PassageRetrieval:
     def __init__(self):
-        self.nlp = spacy.load("en_core_web_sm")
+        self.nlp = spacy.load("en_core_web_sm", disable=['ner', 'textcat', "tok2vec", "tagger", "parser", "attribute_ruler"])
         self.tokenize = lambda text: [token.lemma_ for token in self.nlp(text)]
         self.bm25 = None
         self.passages = None
