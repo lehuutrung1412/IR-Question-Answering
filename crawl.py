@@ -3,30 +3,37 @@ from bs4 import BeautifulSoup
 import requests
 import re
 import concurrent.futures
+import cchardet
+import lxml
+
 MAX_THREADS = 30
 
 class Documents:
     def __init__(self, query):
         self.query = query
         self.link_search = search(self.query)
+        self.requests_session = requests.Session()
 
     def gett(self, link_search):
         url = link_search
         if url.split('/')[0] == '':
             return ''
-        html = requests.get(url, timeout = 4)
+        html = self.requests_session.get(url, timeout = 4)
         tree = BeautifulSoup(html.text,'lxml')
-        para = tree.findAll(['p', 'span', 'h1', 'h2', 'h3', 'li'])
+        para = tree.findAll(['p'])
         doc = []
         for p in para:
             p_text = p.getText()
             if p_text == '\n':
                 continue
+            if len(p_text) < 30:
+                continue
             doc.append(p_text)
         doc_str = ' '.join(doc)
         doc_str = re.sub(r'\[.*?\]', '', doc_str)
-        # doc_str = re.sub('\n\n', '\n', doc_str)
         doc_str = re.sub('\xa0', ' ', doc_str)
+        doc_str = re.sub(' +', ' ', doc_str)
+        doc_str = re.sub('\n\n', '\n', doc_str)
         return doc_str
 
 
