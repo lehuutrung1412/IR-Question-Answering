@@ -4,8 +4,9 @@ import spacy
 import concurrent.futures
 
 class PassageRetrieval:
-    def __init__(self, nlp):
-        self.tokenize = lambda text: [token.lemma_ for token in nlp(text)]
+    def __init__(self):
+        self.nlp = spacy.load("en_core_web_sm")
+        self.tokenize = lambda text: [token.lemma_ for token in self.nlp(text)]
         self.bm25 = None
         self.passages = None
 
