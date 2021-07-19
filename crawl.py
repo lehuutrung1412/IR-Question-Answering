@@ -3,18 +3,22 @@ from bs4 import BeautifulSoup
 import requests
 import re
 import concurrent.futures
+import cchardet
+import lxml
+
 MAX_THREADS = 30
 
 class Documents:
     def __init__(self, query):
         self.query = query
         self.link_search = search(self.query)
+        self.requests_session = requests.Session()
 
     def gett(self, link_search):
         url = link_search
         if url.split('/')[0] == '':
             return ''
-        html = requests.get(url, timeout = 4)
+        html = self.requests_session.get(url, timeout = 4)
         tree = BeautifulSoup(html.text,'lxml')
         para = tree.findAll(['p', 'span', 'h1', 'h2', 'h3', 'li'])
         doc = []
