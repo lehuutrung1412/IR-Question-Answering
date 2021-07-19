@@ -1,5 +1,7 @@
 from flask import Flask, render_template, url_for, jsonify, request
 from flask_ngrok import run_with_ngrok
+import sys
+sys.path.insert(1, '/content/IR-Question-Answering/')
 from main import main
 
 app = Flask(__name__)
@@ -16,7 +18,7 @@ def send():
         question = request.form['question']
         ans = main(question)
         print(ans)
-        return jsonify({'ans': 'OK', 'text': 'helo OK'})
+        return jsonify(ans)
     return render_template('index.html')
 
 
