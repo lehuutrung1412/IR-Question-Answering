@@ -29,7 +29,7 @@ function upload(){
         success: function (response){
             if (response){
                 console.log(response);
-                let ans = response['ans'];
+                let ans = response['answer'];
                 let text = response['text'];
                 answer.value = ans;
                 textans.value = text;
