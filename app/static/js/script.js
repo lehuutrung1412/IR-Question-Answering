@@ -33,9 +33,9 @@ function upload(){
                 let text = response['text'];
                 let start = response['start'];
                 let end = response['end'];
-                text = text.slice(0, start) + "<b>" + text.slice(start, end) + "</b>" + text.slice(end, text.lenght);
+                text = text.slice(0, start) + "<strong>" + text.slice(start, end) + "</strong>" + text.slice(end, text.lenght);
                 answer.value = ans;
-                textans.value = text;
+                textans.innerHTML = text;
             }
             else{
                 console.log('No response');
