@@ -2,10 +2,11 @@ import itertools
 from rank_bm25 import BM25Okapi
 import spacy
 import concurrent.futures
+spacy.prefer_gpu()
 
 class PassageRetrieval:
     def __init__(self):
-        self.nlp = spacy.load("en_core_web_sm")
+        self.nlp = spacy.load("en_core_web_sm", disable=['ner', 'textcat', "tok2vec", "parser", "attribute_ruler"])
         self.tokenize = lambda text: [token.lemma_ for token in self.nlp(text)]
         self.bm25 = None
         self.passages = None
@@ -21,7 +22,6 @@ class PassageRetrieval:
         with concurrent.futures.ThreadPoolExecutor() as executor:
             corpus = [executor.submit(self.tokenize, p).result() for p in passages]
         # corpus = [self.tokenize(p) for p in passages]
-        print('oke')
         self.bm25 = BM25Okapi(corpus)
         self.passages = passages
 
@@ -32,4 +32,3 @@ class PassageRetrieval:
         pairs.sort(reverse=True)
         passages = [self.passages[i] for _, i in pairs[:topn]]
         return passages
-        # return self.passages
