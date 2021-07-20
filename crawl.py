@@ -67,4 +67,4 @@ class GoogleSearchAPI:
         return [result['link'] for result in self.search(query, num=5)]
     
     def get_passages(self, query, num=5):
-        return [item_['snippet'] for item_ in self.search(query, num)]
+        return [item_['snippet'] for item_ in self.search(query, num=num)]
