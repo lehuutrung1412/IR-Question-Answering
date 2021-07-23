@@ -1,0 +1,5 @@
+googlesearch-python
+transformers
+rank_bm25
+flask-ngrok
+cchardet
